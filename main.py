@@ -136,6 +136,23 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
     for k, v in config.items():
         if k[0:5] == "birth":
             birthdays[k] = v
+     #获取明日课程
+    if week == "星期日":
+        keChen = config["zhou1"]
+    elif week == "星期一":
+        keChen = config["zhou2"]
+    elif week == "星期二":
+        keChen = config["zhou3"]
+    elif week == "星期三":
+        keChen = config["zhou4"]
+    elif week == "星期四":
+        keChen = config["zhou5"]
+    elif week == "星期五":
+        keChen = config["zhou6"]
+    elif week == "星期六":
+        keChen = config["zhou7"]
+    else:
+        keChen = "课程错误"
     data = {
         "touser": to_user,
         "template_id": config["template_id"],
