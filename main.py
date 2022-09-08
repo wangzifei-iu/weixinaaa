@@ -115,7 +115,7 @@ def get_ciba():
     return note_ch, note_en
  
  
-def send_message(to_user, access_token, region_name, weather, temp, wind_dir, note_ch, note_en):
+def send_message(to_user, access_token, region_name, weather, temp, wind_dir, note_ch, note_en,keChen):
     url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={}".format(access_token)
     week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
     year = localtime().tm_year
@@ -136,23 +136,6 @@ def send_message(to_user, access_token, region_name, weather, temp, wind_dir, no
     for k, v in config.items():
         if k[0:5] == "birth":
             birthdays[k] = v
-    #获取明日课程
-    if week == "星期日":
-        keChen = config["zhou1"]
-    elif week == "星期一":
-        keChen = config["zhou2"]
-    elif week == "星期二":
-        keChen = config["zhou3"]
-    elif week == "星期三":
-        keChen = config["zhou4"]
-    elif week == "星期四":
-        keChen = config["zhou5"]
-    elif week == "星期五":
-        keChen = config["zhou6"]
-    elif week == "星期六":
-        keChen = config["zhou7"]
-    else:
-        keChen = "课程错误"
     data = {
         "touser": to_user,
         "template_id": config["template_id"],
@@ -249,7 +232,30 @@ if __name__ == "__main__":
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
+    week_list = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+    year = localtime().tm_year
+    month = localtime().tm_mon
+    day = localtime().tm_mday
+    today = datetime.date(datetime(year=year, month=month, day=day))
+    week = week_list[today.isoweekday() % 7]
+        #获取明日课程
+    if week == "星期日":
+        keChen = config["zhou1"]
+    elif week == "星期一":
+        keChen = config["zhou2"]
+    elif week == "星期二":
+        keChen = config["zhou3"]
+    elif week == "星期三":
+        keChen = config["zhou4"]
+    elif week == "星期四":
+        keChen = config["zhou5"]
+    elif week == "星期五":
+        keChen = config["zhou6"]
+    elif week == "星期六":
+        keChen = config["zhou7"]
+    else:
+        keChen = "课程错误"
     # 公众号推送消息
     for user in users:
-        send_message(user, accessToken, region, weather, temp, wind_dir, note_ch, note_en)
+        send_message(user, accessToken, region, weather, temp, wind_dir, note_ch, note_en,keChen)
     os.system("pause")
